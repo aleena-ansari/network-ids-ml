@@ -1,0 +1,7 @@
+venv/
+__pycache__/
+*.pkl
+data/train.csv
+data/train_cleaned.csv
+.env
+node_modules/
