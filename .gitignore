@@ -5,3 +5,6 @@ data/train.csv
 data/train_cleaned.csv
 .env
 node_modules/
+backend/alerts.db
+*.db
+.ipynb_checkpoints/
