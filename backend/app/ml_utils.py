@@ -3,11 +3,13 @@ import joblib
 import os
 import subprocess
 import re
+import ipaddress
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 binary_model = joblib.load(os.path.join(BASE_DIR, "binary_model.pkl"))
 category_model = joblib.load(os.path.join(BASE_DIR, "category_model.pkl"))
+isolation_model = joblib.load(os.path.join(BASE_DIR, "isolation_forest.pkl"))
 model_columns = joblib.load(os.path.join(BASE_DIR, "model_columns.pkl"))
 
 severity_weight = {
@@ -19,47 +21,88 @@ severity_weight = {
 }
 
 
+
 def predict_row(row_df: pd.DataFrame) -> dict:
+    # Ensure the features match the training column order
     row_df = row_df.reindex(columns=model_columns, fill_value=0)
 
+    # Model 1: supervised Random Forest
     binary_proba = binary_model.predict_proba(row_df)[0]
     binary_classes = list(binary_model.classes_)
-    attack_confidence = float(binary_proba[binary_classes.index("attack")])
-    label = binary_model.predict(row_df)[0]
+    attack_confidence = float(
+        binary_proba[binary_classes.index("attack")]
+    )
 
-    if label == "normal":
+    threshold = 0.3
+    label = "attack" if attack_confidence >= threshold else "normal"
+
+    # Model 2: Isolation Forest
+    # -1 means anomaly; +1 means inlier
+    anomaly_prediction = int(isolation_model.predict(row_df)[0])
+    is_anomaly = anomaly_prediction == -1
+
+    # If Random Forest flags an attack, classify its category
+    if label == "attack":
+        cat_proba = category_model.predict_proba(row_df)[0]
+        cat_classes = list(category_model.classes_)
+        predicted_category = category_model.predict(row_df)[0]
+
+        category_confidence = float(
+            cat_proba[cat_classes.index(predicted_category)]
+        )
+
+        weight = severity_weight.get(predicted_category, 0.7)
+        risk_score = (
+            attack_confidence * category_confidence * weight * 100
+        )
+
         return {
-            "label": "normal",
-            "category": "normal",
-            "risk_score": round(attack_confidence * 100, 1)
+            "label": "attack",
+            "category": predicted_category,
+            "risk_score": round(float(risk_score), 1),
+            "detection_source": "random_forest",
+            "anomaly_detected": is_anomaly
         }
 
-    cat_proba = category_model.predict_proba(row_df)[0]
-    cat_classes = list(category_model.classes_)
-    predicted_category = category_model.predict(row_df)[0]
-    category_confidence = float(cat_proba[cat_classes.index(predicted_category)])
+    # Random Forest says normal, but Isolation Forest flags unusual traffic
+    if is_anomaly:
+        return {
+            "label": "attack",
+            "category": "anomaly",
+            "risk_score": 50.0,
+            "detection_source": "isolation_forest",
+            "anomaly_detected": True
+        }
 
-    weight = severity_weight.get(predicted_category, 0.7)
-    risk_score = attack_confidence * category_confidence * weight * 100
-
+    # Neither model flags the traffic
     return {
-        "label": "attack",
-        "category": predicted_category,
-        "risk_score": round(float(risk_score), 1)
+        "label": "normal",
+        "category": "normal",
+        "risk_score": round(attack_confidence * 100, 1),
+        "detection_source": "none",
+        "anomaly_detected": False
     }
 
 
 def is_local_ip(ip: str) -> bool:
-    """Check if an IP address is within common private/local network ranges."""
+    """Check whether an IP belongs to a private IPv4 network or loopback."""
     if not ip:
         return False
-    private_patterns = [
-        r"^10\.",
-        r"^192\.168\.",
-        r"^172\.(1[6-9]|2[0-9]|3[0-1])\.",
-        r"^127\."
-    ]
-    return any(re.match(pattern, ip) for pattern in private_patterns)
+
+    try:
+        address = ipaddress.ip_address(ip)
+    except ValueError:
+        return False
+
+    if not isinstance(address, ipaddress.IPv4Address):
+        return False
+
+    return (
+        address.is_loopback
+        or address in ipaddress.ip_network("10.0.0.0/8")
+        or address in ipaddress.ip_network("172.16.0.0/12")
+        or address in ipaddress.ip_network("192.168.0.0/16")
+    )
 
 
 def get_mac_from_ip(ip: str):

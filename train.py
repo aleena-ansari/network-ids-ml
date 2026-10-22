@@ -1,5 +1,7 @@
 import pandas as pd
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier, IsolationForest
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import classification_report, confusion_matrix
 import joblib
 
@@ -88,7 +90,35 @@ print(classification_report(y_test_cat, y_pred_cat))
 print(confusion_matrix(y_test_cat, y_pred_cat))
 
 # Save both models + the column list (needed later by backend)
+
+# ---------- MODEL 3: Anomaly detection ----------
+# Train Isolation Forest using NORMAL TRAINING ROWS ONLY.
+print("\nTraining Isolation Forest on normal training traffic...")
+
+normal_train = X_train[y_train_binary == "normal"]
+
+isolation_model = Pipeline([
+    ("scaler", StandardScaler()),
+    ("isolation_forest", IsolationForest(
+        n_estimators=100,
+        contamination=0.02,
+        random_state=42,
+        n_jobs=-1
+    ))
+])
+
+isolation_model.fit(normal_train)
+
+print("Isolation Forest training complete.")
+print("Normal training rows:", len(normal_train))
+
+# Save all three models + the feature column list.
 joblib.dump(binary_model, "binary_model.pkl")
 joblib.dump(category_model, "category_model.pkl")
+joblib.dump(isolation_model, "isolation_forest.pkl")
 joblib.dump(list(X_train.columns), "model_columns.pkl")
-print("\nSaved: binary_model.pkl, category_model.pkl, model_columns.pkl")
+
+print(
+    "\nSaved: binary_model.pkl, category_model.pkl, "
+    "isolation_forest.pkl, model_columns.pkl"
+)

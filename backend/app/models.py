@@ -12,5 +12,7 @@ class Alert(Base):
     label = Column(String)                         # "normal" or "attack"
     category = Column(String)                      # "dos", "probe", "r2l", "u2r", "normal"
     risk_score = Column(Float)
+    detection_source = Column(String, default="none")
+    anomaly_detected = Column(Integer, default=0)
     status = Column(String, default="new")         # new / reviewed / false_positive / escalated
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
