@@ -1,0 +1,7 @@
+{
+  "precision": 0.962,
+  "recall": 0.934,
+  "false_positive_rate": 0.028,
+  "auc": 0.978,
+  "source": "Sample data — pending backend /metrics endpoint"
+}
