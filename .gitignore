@@ -1,10 +1,20 @@
+# Python
 venv/
+.venv/
 __pycache__/
-*.pkl
+*.py[cod]
+.ipynb_checkpoints/
+
+# Secrets
+.env
+.env.*
+
+# Frontend dependencies
+node_modules/
+
+# Local databases
+*.db
+
+# Large datasets (keep these excluded if not distributing them)
 data/train.csv
 data/train_cleaned.csv
-.env
-node_modules/
-backend/alerts.db
-*.db
-.ipynb_checkpoints/
