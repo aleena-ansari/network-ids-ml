@@ -1,0 +1,195 @@
+{
+    "method": "Isolation Forest score_samples thresholds",
+    "threshold_source": "Thursday BENIGN validation records only",
+    "results": {
+        "0.5%": {
+            "score_threshold": -0.6453507699884509,
+            "validation": {
+                "precision": 0.00546448087431694,
+                "recall": 0.005048187241854061,
+                "f1_score": 0.005248091603053435,
+                "false_positive_rate": 0.005001798848736808,
+                "true_negatives": 398254,
+                "false_positives": 2002,
+                "false_negatives": 2168,
+                "true_positives": 11
+            },
+            "friday_test": {
+                "precision": 0.6144517975317475,
+                "recall": 0.07784515263577696,
+                "f1_score": 0.13818374890893806,
+                "false_positive_rate": 0.027301489195165878,
+                "true_negatives": 383999,
+                "false_positives": 10778,
+                "false_negatives": 203479,
+                "true_positives": 17177
+            },
+            "friday_per_attack": {
+                "Bot": {
+                    "samples": 1948,
+                    "detected": 0,
+                    "detection_rate": 0.0
+                },
+                "DDoS": {
+                    "samples": 128014,
+                    "detected": 17177,
+                    "detection_rate": 0.1341806364928836
+                },
+                "PortScan": {
+                    "samples": 90694,
+                    "detected": 0,
+                    "detection_rate": 0.0
+                }
+            }
+        },
+        "1.0%": {
+            "score_threshold": -0.6243491503864139,
+            "validation": {
+                "precision": 0.00866765725606736,
+                "recall": 0.016062413951353834,
+                "f1_score": 0.011259449895447965,
+                "false_positive_rate": 0.010001099296450272,
+                "true_negatives": 396253,
+                "false_positives": 4003,
+                "false_negatives": 2144,
+                "true_positives": 35
+            },
+            "friday_test": {
+                "precision": 0.6149729526454337,
+                "recall": 0.0963445362917845,
+                "f1_score": 0.16659026349299638,
+                "false_positive_rate": 0.03371523670325272,
+                "true_negatives": 381467,
+                "false_positives": 13310,
+                "false_negatives": 199397,
+                "true_positives": 21259
+            },
+            "friday_per_attack": {
+                "Bot": {
+                    "samples": 1948,
+                    "detected": 11,
+                    "detection_rate": 0.005646817248459959
+                },
+                "DDoS": {
+                    "samples": 128014,
+                    "detected": 21225,
+                    "detection_rate": 0.16580217788679363
+                },
+                "PortScan": {
+                    "samples": 90694,
+                    "detected": 23,
+                    "detection_rate": 0.0002536000176417404
+                }
+            }
+        },
+        "2.0%": {
+            "score_threshold": -0.5889623468769575,
+            "validation": {
+                "precision": 0.00558936778039995,
+                "recall": 0.02065167508031207,
+                "f1_score": 0.008797653958944282,
+                "false_positive_rate": 0.020002198592900543,
+                "true_negatives": 392250,
+                "false_positives": 8006,
+                "false_negatives": 2134,
+                "true_positives": 45
+            },
+            "friday_test": {
+                "precision": 0.5238396573125319,
+                "recall": 0.09754096874773403,
+                "f1_score": 0.16445903042297216,
+                "false_positive_rate": 0.04955709172520182,
+                "true_negatives": 375213,
+                "false_positives": 19564,
+                "false_negatives": 199133,
+                "true_positives": 21523
+            },
+            "friday_per_attack": {
+                "Bot": {
+                    "samples": 1948,
+                    "detected": 43,
+                    "detection_rate": 0.022073921971252568
+                },
+                "DDoS": {
+                    "samples": 128014,
+                    "detected": 21438,
+                    "detection_rate": 0.1674660583998625
+                },
+                "PortScan": {
+                    "samples": 90694,
+                    "detected": 42,
+                    "detection_rate": 0.000463095684389265
+                }
+            }
+        },
+        "4.0%": {
+            "score_threshold": -0.5533064454599833,
+            "validation": {
+                "precision": 0.007254464285714286,
+                "recall": 0.053694355208811384,
+                "f1_score": 0.012781995957830338,
+                "false_positive_rate": 0.040001898784777744,
+                "true_negatives": 384245,
+                "false_positives": 16011,
+                "false_negatives": 2062,
+                "true_positives": 117
+            },
+            "friday_test": {
+                "precision": 0.39700520372402565,
+                "recall": 0.10165143934450004,
+                "f1_score": 0.1618594716294912,
+                "false_positive_rate": 0.08629682073677038,
+                "true_negatives": 360709,
+                "false_positives": 34068,
+                "false_negatives": 198226,
+                "true_positives": 22430
+            },
+            "friday_per_attack": {
+                "Bot": {
+                    "samples": 1948,
+                    "detected": 44,
+                    "detection_rate": 0.022587268993839837
+                },
+                "DDoS": {
+                    "samples": 128014,
+                    "detected": 22319,
+                    "detection_rate": 0.17434811817457466
+                },
+                "PortScan": {
+                    "samples": 90694,
+                    "detected": 67,
+                    "detection_rate": 0.0007387478774781132
+                }
+            }
+        }
+    },
+    "selected_operating_point": "1.0%",
+    "selected_score_threshold": -0.6243491503864139,
+    "selected_friday_results": {
+        "precision": 0.6149729526454337,
+        "recall": 0.0963445362917845,
+        "f1_score": 0.16659026349299638,
+        "false_positive_rate": 0.03371523670325272,
+        "true_negatives": 381467,
+        "false_positives": 13310,
+        "false_negatives": 199397,
+        "true_positives": 21259
+    },
+    "selected_friday_per_attack": {
+        "Bot": {
+            "samples": 1948,
+            "detected": 11,
+            "detection_rate": 0.005646817248459959
+        },
+        "DDoS": {
+            "samples": 128014,
+            "detected": 21225,
+            "detection_rate": 0.16580217788679363
+        },
+        "PortScan": {
+            "samples": 90694,
+            "detected": 23,
+            "detection_rate": 0.0002536000176417404
+        }
+    }
+}

@@ -1,0 +1,99 @@
+{
+    "random_forest_threshold": 0.2,
+    "isolation_forest_threshold": -0.6243491503864139,
+    "if_validation_benign_fpr_target": 0.01,
+    "validation": {
+        "random_forest": {
+            "precision": 0.6003062787136294,
+            "recall": 0.8994951812758146,
+            "f1": 0.7200587803085966,
+            "false_positive_rate": 0.003260413335465302,
+            "TN": 398951,
+            "FP": 1305,
+            "FN": 219,
+            "TP": 1960
+        },
+        "isolation_forest": {
+            "precision": 0.00866765725606736,
+            "recall": 0.016062413951353834,
+            "f1": 0.011259449895447965,
+            "false_positive_rate": 0.010001099296450272,
+            "TN": 396253,
+            "FP": 4003,
+            "FN": 2144,
+            "TP": 35
+        },
+        "hybrid": {
+            "precision": 0.27351247600767753,
+            "recall": 0.9155575952271684,
+            "f1": 0.42119708645624404,
+            "false_positive_rate": 0.013239027022705468,
+            "TN": 394957,
+            "FP": 5299,
+            "FN": 184,
+            "TP": 1995
+        }
+    },
+    "friday_test": {
+        "random_forest": {
+            "precision": 0.9614066993740484,
+            "recall": 0.41207127836995144,
+            "f1": 0.5768830575576084,
+            "false_positive_rate": 0.009245726068134669,
+            "TN": 391127,
+            "FP": 3650,
+            "FN": 129730,
+            "TP": 90926
+        },
+        "isolation_forest": {
+            "precision": 0.6149729526454337,
+            "recall": 0.0963445362917845,
+            "f1": 0.16659026349299638,
+            "false_positive_rate": 0.03371523670325272,
+            "TN": 381467,
+            "FP": 13310,
+            "FN": 199397,
+            "TP": 21259
+        },
+        "hybrid": {
+            "precision": 0.8428940855879654,
+            "recall": 0.4121301936045247,
+            "f1": 0.5535862667214537,
+            "false_positive_rate": 0.042935632015036335,
+            "TN": 377827,
+            "FP": 16950,
+            "FN": 129717,
+            "TP": 90939
+        }
+    },
+    "friday_per_attack": {
+        "Bot": {
+            "samples": 1948,
+            "RF_detected": 0,
+            "IF_detected": 11,
+            "Hybrid_detected": 11,
+            "RF_recall": 0.0,
+            "IF_recall": 0.005646817248459959,
+            "Hybrid_recall": 0.005646817248459959
+        },
+        "DDoS": {
+            "samples": 128014,
+            "RF_detected": 88886,
+            "IF_detected": 21225,
+            "Hybrid_detected": 88886,
+            "RF_recall": 0.6943459309138063,
+            "IF_recall": 0.16580217788679363,
+            "Hybrid_recall": 0.6943459309138063
+        },
+        "PortScan": {
+            "samples": 90694,
+            "RF_detected": 2040,
+            "IF_detected": 23,
+            "Hybrid_detected": 2042,
+            "RF_recall": 0.022493218956050016,
+            "IF_recall": 0.0002536000176417404,
+            "Hybrid_recall": 0.022515271131497122
+        }
+    },
+    "note": "IF threshold calibrated on Thursday BENIGN traffic. Friday used only for final evaluation."
+}

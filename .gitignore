@@ -8,3 +8,8 @@ node_modules/
 backend/alerts.db
 *.db
 .ipynb_checkpoints/
+
+# CICIDS datasets (hundreds of MB, never commit)
+data/cicids/
+data/cicids_processed/
+data/cicids_ready/

@@ -1,0 +1,174 @@
+{
+    "dataset": "CICIDS2017",
+    "training_days": "Monday-Wednesday",
+    "validation_day": "Thursday",
+    "test_day": "Friday",
+    "training_samples_used": 502906,
+    "isolation_forest_normal_samples": 100000,
+    "feature_count": 78,
+    "selected_threshold": 0.2,
+    "threshold_validation_results": {
+        "0.1": {
+            "precision": 0.33726697451684623,
+            "recall": 0.9050022946305645,
+            "f1_score": 0.4914029404435584,
+            "false_positive_rate": 0.009681303965462105,
+            "true_negatives": 396381,
+            "false_positives": 3875,
+            "false_negatives": 207,
+            "true_positives": 1972,
+            "alerts": 5847,
+            "roc_auc": 0.9938086085437675
+        },
+        "0.2": {
+            "precision": 0.6003062787136294,
+            "recall": 0.8994951812758146,
+            "f1_score": 0.7200587803085966,
+            "false_positive_rate": 0.003260413335465302,
+            "true_negatives": 398951,
+            "false_positives": 1305,
+            "false_negatives": 219,
+            "true_positives": 1960,
+            "alerts": 3265,
+            "roc_auc": 0.9938086085437675
+        },
+        "0.3": {
+            "precision": 0.2361376673040153,
+            "recall": 0.11335474988526847,
+            "f1_score": 0.1531782945736434,
+            "false_positive_rate": 0.001996222417652702,
+            "true_negatives": 399457,
+            "false_positives": 799,
+            "false_negatives": 1932,
+            "true_positives": 247,
+            "alerts": 1046,
+            "roc_auc": 0.9938086085437675
+        },
+        "0.4": {
+            "precision": 0.10526315789473684,
+            "recall": 0.030289123451124368,
+            "f1_score": 0.047042052744119746,
+            "false_positive_rate": 0.0014016029740965782,
+            "true_negatives": 399695,
+            "false_positives": 561,
+            "false_negatives": 2113,
+            "true_positives": 66,
+            "alerts": 627,
+            "roc_auc": 0.9938086085437675
+        },
+        "0.5": {
+            "precision": 0.11586901763224182,
+            "recall": 0.021110601193207894,
+            "f1_score": 0.03571428571428571,
+            "false_positive_rate": 0.0008769387591941157,
+            "true_negatives": 399905,
+            "false_positives": 351,
+            "false_negatives": 2133,
+            "true_positives": 46,
+            "alerts": 397,
+            "roc_auc": 0.9938086085437675
+        }
+    },
+    "validation_results": {
+        "random_forest": {
+            "precision": 0.6003062787136294,
+            "recall": 0.8994951812758146,
+            "f1_score": 0.7200587803085966,
+            "false_positive_rate": 0.003260413335465302,
+            "true_negatives": 398951,
+            "false_positives": 1305,
+            "false_negatives": 219,
+            "true_positives": 1960,
+            "alerts": 3265,
+            "roc_auc": 0.9938086085437675
+        },
+        "isolation_forest": {
+            "precision": 0.00724762726488352,
+            "recall": 0.019274896741624598,
+            "f1_score": 0.010534236267870579,
+            "false_positive_rate": 0.014373301087304126,
+            "true_negatives": 394503,
+            "false_positives": 5753,
+            "false_negatives": 2137,
+            "true_positives": 42,
+            "alerts": 5795
+        },
+        "hybrid": {
+            "precision": 0.22128882502487013,
+            "recall": 0.9187700780174392,
+            "f1_score": 0.35667201140210225,
+            "false_positive_rate": 0.01760123520946594,
+            "true_negatives": 393211,
+            "false_positives": 7045,
+            "false_negatives": 177,
+            "true_positives": 2002,
+            "alerts": 9047
+        }
+    },
+    "friday_test_results": {
+        "random_forest": {
+            "precision": 0.9614066993740484,
+            "recall": 0.41207127836995144,
+            "f1_score": 0.5768830575576084,
+            "false_positive_rate": 0.009245726068134669,
+            "true_negatives": 391127,
+            "false_positives": 3650,
+            "false_negatives": 129730,
+            "true_positives": 90926,
+            "alerts": 94576,
+            "roc_auc": 0.97340454097843
+        },
+        "isolation_forest": {
+            "precision": 0.5823107138019775,
+            "recall": 0.09741860633746646,
+            "f1_score": 0.16691320063205872,
+            "false_positive_rate": 0.03905749321768999,
+            "true_negatives": 379358,
+            "false_positives": 15419,
+            "false_negatives": 199160,
+            "true_positives": 21496,
+            "alerts": 36915
+        },
+        "hybrid": {
+            "precision": 0.8269194054275194,
+            "recall": 0.4122117685447031,
+            "f1_score": 0.5501692116461163,
+            "false_positive_rate": 0.04822469394113639,
+            "true_negatives": 375739,
+            "false_positives": 19038,
+            "false_negatives": 129699,
+            "true_positives": 90957,
+            "alerts": 109995
+        }
+    },
+    "per_attack_results": {
+        "Bot": {
+            "samples": 1948,
+            "random_forest_detected": 0,
+            "isolation_forest_detected": 27,
+            "hybrid_detected": 27,
+            "random_forest_recall": 0.0,
+            "isolation_forest_recall": 0.013860369609856264,
+            "hybrid_recall": 0.013860369609856264
+        },
+        "DDoS": {
+            "samples": 128014,
+            "random_forest_detected": 88886,
+            "isolation_forest_detected": 21431,
+            "hybrid_detected": 88886,
+            "random_forest_recall": 0.6943459309138063,
+            "isolation_forest_recall": 0.1674113768806537,
+            "hybrid_recall": 0.6943459309138063
+        },
+        "PortScan": {
+            "samples": 90694,
+            "random_forest_detected": 2040,
+            "isolation_forest_detected": 38,
+            "hybrid_detected": 2044,
+            "random_forest_recall": 0.022493218956050016,
+            "isolation_forest_recall": 0.0004189913334950493,
+            "hybrid_recall": 0.02253732330694423
+        }
+    },
+    "note": "Friday contains attack families absent from training. Per-family scores measure binary detection, not family classification. Threshold was selected using Thursday validation only."
+}
