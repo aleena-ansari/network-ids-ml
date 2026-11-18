@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import AlertTable from '../components/AlertTable.jsx';
 import MetricsPanel from '../components/MetricsPanel.jsx';
+import SimulatePanel from '../components/SimulatePanel.jsx';
 import StatCard from '../components/StatCard.jsx';
-import TrafficForm from '../components/TrafficForm.jsx';
-import { getAlerts, predict } from '../api/alerts.js';
+import { getAlerts } from '../api/alerts.js';
 import { fetchMetrics } from '../api/metrics.js';
 
 const tabs = [['all', 'All'], ['new', 'New'], ['reviewed', 'Reviewed'], ['false_positive', 'False positive'], ['escalated', 'Escalated']];
@@ -15,7 +15,6 @@ export default function Dashboard() {
   const [sort, setSort] = useState({ key: 'created_at', direction: 'desc' });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [busy, setBusy] = useState(false);
 
   const refresh = useCallback(async (initial = false) => {
     try {
@@ -46,17 +45,6 @@ export default function Dashboard() {
     });
   }, [alerts, filter, sort]);
 
-  async function submitTraffic(payload) {
-    setBusy(true);
-    try {
-      const alert = await predict(payload);
-      try { sessionStorage.setItem(`sentrynet:features:${alert.id}`, JSON.stringify(payload)); } catch { /* storage may be unavailable */ }
-      setAlerts((current) => [{ ...alert, fresh: true }, ...current.filter((item) => item.id !== alert.id)]);
-      await refresh(false);
-      return alert;
-    } finally { setBusy(false); }
-  }
-
   function toggleSort(key) {
     setSort((current) => ({ key, direction: current.key === key && current.direction === 'desc' ? 'asc' : 'desc' }));
   }
@@ -65,18 +53,19 @@ export default function Dashboard() {
   const newCount = alerts.filter((item) => item.status === 'new').length;
   const attacks = alerts.filter((item) => item.label === 'attack').length;
   const normals = total - attacks;
+  const flagged = alerts.filter((item) => item.anomaly_detected).length;
 
   return <>
-    <section className="page-intro"><div><div className="eyebrow"><span className="pulse-dot" /> NETWORK OPERATIONS / OVERVIEW</div><h1>Threat <em>monitor</em></h1><p>Live network detections and analyst triage.</p></div><div className="stream-state"><span className="pulse-dot" /> LIVE STREAM <small>5s refresh</small></div></section>
-    {error && <div className="connection-banner"><span>!</span><div><strong>Backend unavailable</strong><p>{error}. Start the FastAPI service to receive live alerts.</p></div><button className="button subtle" onClick={() => refresh(false)}>Retry</button></div>}
+    <section className="page-intro"><div><div className="eyebrow"><span className="pulse-dot" /> NETWORK OPERATIONS / OVERVIEW</div><h1>Threat <em>monitor</em></h1><p>Replayed CICIDS2017 flows and analyst triage. Alerts are for review only; nothing is blocked.</p></div><div className="stream-state"><span className="pulse-dot" /> REPLAY DEMO <small>5s refresh</small></div></section>
+    {error && <div className="connection-banner"><span>!</span><div><strong>Backend unavailable</strong><p>{error}. Start the FastAPI service to receive alerts.</p></div><button className="button subtle" onClick={() => refresh(false)}>Retry</button></div>}
     <div className="overview-grid"><div className="overview-left">
       <div className="stats-grid">
         <StatCard label="Total alerts" value={total} note="All detections" />
         <StatCard label="Needs review" value={newCount} note="Active triage queue" tone="amber" />
-        <StatCard label="Attack / normal" value={<>{attacks}<span className="split-slash"> / </span>{normals}</>} note="Across all events" tone="red" />
+        <StatCard label="Attack / normal" value={<>{attacks}<span className="split-slash"> / </span>{normals}</>} note={`${flagged} unusual-traffic flags (review only)`} tone="red" />
       </div>
       {metrics && <MetricsPanel data={metrics} />}
-    </div><TrafficForm onSubmit={submitTraffic} busy={busy} /></div>
+    </div><SimulatePanel onDone={() => refresh(false)} /></div>
     <section className="panel queue-panel"><div className="queue-heading"><div><span className="eyebrow">DETECTION LOG</span><h2>Alert triage</h2></div><span className="queue-count">{filteredAlerts.length} <span>events</span></span></div>
       <div className="filter-tabs" role="tablist">{tabs.map(([key, label]) => <button key={key} role="tab" aria-selected={filter === key} className={filter === key ? 'active' : ''} onClick={() => setFilter(key)}>{label}{key === 'new' && <span>{newCount}</span>}</button>)}</div>
       <AlertTable alerts={filteredAlerts} sort={sort} onSort={toggleSort} loading={loading} />
