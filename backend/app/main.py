@@ -205,6 +205,37 @@ def simulate(count: int = 5, db: Session = Depends(get_db)):
     }
 
 
+def _pick(d, names):
+    for n in names:
+        if isinstance(d, dict) and d.get(n) is not None:
+            return d[n]
+    return None
+
+
+def build_summary(saved: dict) -> dict:
+    """Flat headline numbers for the dashboard: Random Forest on the Friday test day."""
+    rf = (saved.get("friday_test_results") or {}).get("random_forest") or {}
+    summary = {
+        "precision": _pick(rf, ["precision"]),
+        "recall": _pick(rf, ["recall"]),
+        "false_positive_rate": _pick(rf, ["false_positive_rate", "fpr"]),
+        "auc": _pick(rf, ["roc_auc", "auc", "roc_auc_score", "auc_roc"]),
+    }
+    missing = [k for k, v in summary.items() if v is None]
+    if missing:
+        raise HTTPException(
+            status_code=500,
+            detail=f"cic_metrics.json is missing {missing}; Random Forest keys found: {sorted(rf.keys())}",
+        )
+    summary.update({
+        "model": "Random Forest",
+        "evaluated_on": "Friday test day (DDoS, PortScan, Bot were not in the training data)",
+        "threshold": saved.get("selected_threshold"),
+        "caveat": "DDoS is detected far more often than PortScan and Bot, which are mostly missed. Offline benchmark, not live traffic.",
+    })
+    return summary
+
+
 @app.get("/metrics")
 def get_metrics():
     """Saved offline evaluation (not recomputed on each request)."""
@@ -216,6 +247,7 @@ def get_metrics():
         "source": "backend/cic_metrics.json (offline evaluation; Friday = final test day)",
         "operating_point": cic_utils.model_info(),
         "results": saved,
+        "summary": build_summary(saved),
         "limitations": [
             "CICIDS2017 is a benchmark dataset; this demo replays recorded flows, not live traffic.",
             "Friday attack families (DDoS, PortScan, Bot) were absent from training; the Random Forest misses most PortScan and Bot flows.",
